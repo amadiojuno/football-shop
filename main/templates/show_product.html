@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container py-4">
+    <!-- Back button -->
+    <div class="mb-4">
+        <a href="{% url 'main:show_main' %}" class="btn btn-outline-secondary">
+            ← Back to Product List
+        </a>
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <div class="row">
+                <!-- Product image column -->
+                <div class="col-md-4 mb-4 mb-md-0">
+                    {% if product.thumbnail %}
+                    <img src="{{ product.thumbnail }}" alt="{{ product.name }}" class="img-fluid rounded">
+                    {% else %}
+                    <div class="bg-light text-center p-5 rounded">
+                        <span class="text-muted">No image available</span>
+                    </div>
+                    {% endif %}
+                </div>
+
+                <!-- Product details column -->
+                <div class="col-md-8">
+                    <h1 class="mb-2">{{ product.name }}</h1>
+                    
+                    <div class="mb-3">
+                        <span class="badge bg-primary">{{ product.get_category_display }}</span>
+                        {% if product.is_featured %}
+                        <span class="badge bg-success">Featured</span>
+                        {% endif %}
+                        {% if product.is_hot %}
+                        <span class="badge bg-danger">Hot</span>
+                        {% endif %}
+                    </div>
+                    
+                    <p class="mb-1"><strong>Brand:</strong> {{ product.brand }}</p>
+                    
+                    <div class="mb-3">
+                        <div class="fs-4 text-primary fw-bold mb-2">Rp. {{ product.price }}</div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <p><strong>Rating:</strong> 
+                            <span class="text-warning">
+                            {% for i in "12345"|make_list %}
+                                {% if forloop.counter <= product.rating %}
+                                ★
+                                {% else %}
+                                ☆
+                                {% endif %}
+                            {% endfor %}
+                            </span>
+                            ({{ product.rating }}/5)
+                        </p>
+                    </div>
+                    
+                    <div class="text-muted small mb-3">
+                        <i>Added on {{ product.created_at|date:"d M Y, H:i" }}</i> | 
+                        <i>{{ product.views }} views</i>
+                    </div>
+                    
+                    <div class="mt-4">
+                        <h5>Description</h5>
+                        <div class="border-top pt-3">
+                            {{ product.description|linebreaks }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
