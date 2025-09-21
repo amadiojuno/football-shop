@@ -63,6 +63,14 @@
                         <i>{{ product.views }} views</i>
                     </div>
                     
+                    <div class="mb-3">
+                        {% if product.user %}
+                            <p><strong>Author:</strong> {{ product.user.username }}</p>
+                        {% else %}
+                            <p><strong>Author:</strong> Anonymous</p>
+                        {% endif %}
+                    </div>
+                    
                     <div class="mt-4">
                         <h5>Description</h5>
                         <div class="border-top pt-3">

@@ -93,3 +93,33 @@ Tugas Individu 3
 
     7. Screenshot postman
         https://drive.google.com/drive/folders/1zvVjnvm5FTsAuevugN86n3dece2psdFX?usp=sharing
+
+Tugas Individu 4
+    1. Apa itu Django AuthenticationForm? Jelaskan juga kelebihan dan kekurangannya.
+        - Django AuthenticationForm adalah form built-in di Django untuk menangani proses login pengguna. Form ini secara otomatis memvalidasi username dan password, memudahkan implementasi autentikasi
+        - Kelebihannya adalah sangat praktis dan mengurangi penulisan kode yang berulang.
+        - Kekurangannya adalah terbatas dalam kustomisasi, terutama jika aplikasi membutuhkan logika autentikasi yang lebih kompleks.
+    2. Apa perbedaan antara autentikasi dan otorisasi? Bagaiamana Django mengimplementasikan kedua konsep tersebut?
+        - Autentikasi adalah proses verifikasi identitas pengguna (misalnya, melalui username dan password), sedangkan otorisasi adalah proses pemberian hak akses kepada pengguna setelah identitasnya terverifikasi. Django mengelola autentikasi dengan model User dan form AuthenticationForm, sementara otorisasi menggunakan sistem permissions dan grup untuk mengatur akses ke berbagai bagian aplikasi.
+    3. Apa saja kelebihan dan kekurangan session dan cookies dalam konteks menyimpan state di aplikasi web?
+        - Session menyimpan data di server, sehingga lebih aman dan tidak mudah dimanipulasi oleh pengguna, tetapi dapat mempengaruhi performa jika data terlalu besar. Cookies menyimpan data di sisi klien, mengurangi beban server dan meningkatkan kecepatan, namun lebih rentan terhadap serangan seperti pencurian data atau manipulasi pengguna.
+    4. Apakah penggunaan cookies aman secara default dalam pengembangan web, atau apakah ada risiko potensial yang harus diwaspadai? Bagaimana Django menangani hal tersebut?
+        - Penggunaan cookies tidak sepenuhnya aman secara default karena berisiko terpapar serangan seperti XSS atau CSRF. Risiko ini dapat diminimalkan dengan enkripsi data, serta pengaturan atribut cookie seperti HttpOnly (mencegah akses JavaScript) dan Secure (hanya dikirim melalui HTTPS). Django membantu dengan mengaktifkan perlindungan CSRF dan menyediakan cara untuk mengatur cookies dengan aman.
+    5. Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step:
+        1. Implementasi registrasi, login, dan logout:
+            - Membuat fungsi register, login_user, dan logout_user di views.py
+            - Membuat template register.html dan login.html
+            - Mengimplementasi cookie last_login untuk mencatat waktu login
+            - Menambahkan path URL untuk ketiga fungsi di urls.py
+        2. Membuat dua akun pengguna dengan tiga dummy data:
+            - Menggunakan form register untuk membuat dua akun berbeda
+            - Menambahkan tiga produk untuk setiap akun melalui form Add Product
+        3. Menghubungkan model Product dengan User:
+            - Menambahkan ForeignKey(User) pada model Product
+            - Memodifikasi add_product untuk menyimpan user yang login sebagai pemilik
+            - Menjalankan makemigrations dan migrate
+            - Menambahkan filter produk (all/my) di halaman utama
+        4. Menampilkan informasi pengguna dan cookies:
+            - Menampilkan username dan last_login di halaman utama
+            - Menyimpan cookie saat login dan menghapusnya saat logout
+            - Menambahkan informasi author pada halaman detail produk
