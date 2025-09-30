@@ -1,12 +1,18 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block meta %}
 <title>Login - BeliBola</title>
 {% endblock meta %}
 
 {% block content %}
-<div class="bg-gray-50 w-full min-h-screen flex items-center justify-center p-8">
-  <div class="max-w-md w-full">
+<div class="w-full min-h-screen flex items-center justify-center p-8 relative">
+  <img 
+    src="{% static 'image/belibola-header.jpeg' %}" 
+    alt="Football Shop Banner" 
+    class="absolute inset-0 w-full h-full object-cover">
+  <div class="absolute inset-0 bg-black/50"></div>
+  <div class="max-w-md w-full relative z-10">
     <div class="bg-white rounded-lg border border-gray-200 p-6 sm:p-8 form-style">
       <div class="text-center mb-8">
         <h1 class="text-2xl font-bold text-gray-900 mb-2">Sign In</h1>

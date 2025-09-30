@@ -1,7 +1,7 @@
 {% load static %}
 {% load humanize %}
 
-<article class="bg-white rounded-lg border border-gray-200 hover:shadow-lg transition-all duration-100 overflow-hidden ease-in-out hover:scale-105">
+<article class="bg-white rounded-lg hover:shadow-lg transition-all duration-100 overflow-hidden ease-in-out hover:scale-105">
   <!-- Thumbnail -->
   <div class="aspect-[16/9] relative overflow-hidden">
     <a href="{% url 'main:show_product' product.id %}">
@@ -36,7 +36,7 @@
 
   <!-- Content -->
   <div class="p-5">
-    <div class="flex items-center text-sm text-gray-500 mb-3">
+    <!-- <div class="flex items-center text-sm text-gray-500 mb-3">
       {% if product.created_at %}
         <time datetime="{{ product.created_at|date:'c' }}">
           {{ product.created_at|date:"M j, Y" }}
@@ -46,7 +46,7 @@
       {% endif %}
       <span class="mx-2">•</span>
       <span>{{ product.views }} views</span>
-    </div>
+    </div> -->
 
     <h5 class="text-sm text-gray-500 mb-1">
       {{ product.brand }}
@@ -54,7 +54,7 @@
 
     <h3 class="text-lg font-semibold text-gray-900 mb-3 line-clamp-2 leading-tight">
       <a href="{% url 'main:show_product' product.id %}" class="hover:text-gray-600 transition-colors">
-        {{ product.name }}
+        {{ product.brand }} {{ product.name }}
       </a>
     </h3>
 
@@ -76,29 +76,39 @@
       Rp. {{ product.price|intcomma }}
     </h4>
 
-    <p class="text-gray-600 text-sm leading-relaxed line-clamp-3 mb-4">
+    <!-- <p class="text-gray-600 text-sm leading-relaxed line-clamp-3 mb-4">
       {{ product.description|truncatewords:20 }}
-    </p>
+    </p> -->
 
-    <!-- Action Buttons -->
+    <!-- Action Buttons (outline, fill on hover, responsive full-width) -->
     {% if user.is_authenticated and product.user == user %}
-      <div class="flex items-center justify-between pt-4 border-t border-gray-100">
-        <a href="{% url 'main:show_product' product.id %}" class="text-green-600 hover:text-gray-700 font-medium text-sm transition-colors">
-          Product details →
-        </a>
-        <div class="flex space-x-2">
-          <a href="{% url 'main:edit_product' product.id %}" class="text-gray-600 hover:text-gray-700 text-sm transition-colors">
-            Edit
+      <div class="pt-4 border-t border-gray-100">
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+          <!-- Primary: fills available space on desktop, full width on mobile -->
+          <a href="{% url 'main:show_product' product.id %}"
+             class="block w-full sm:flex-1 text-center inline-flex items-center justify-center px-3 py-2 border border-green-600 text-green-600 text-sm font-medium rounded-md bg-transparent hover:bg-green-600 hover:text-white transition-colors focus:outline-none focus:ring-2 focus:ring-green-200">
+            Details
           </a>
-          <a href="{% url 'main:delete_product' product.id %}" class="text-red-600 hover:text-red-700 text-sm transition-colors">
-            Delete
-          </a>
+
+          <!-- Secondary actions: on mobile each full width, on desktop fixed size -->
+          <div class="flex w-full sm:w-auto gap-2">
+            <a href="{% url 'main:edit_product' product.id %}"
+               class="block w-full sm:w-auto flex-1 sm:flex-none text-center inline-flex items-center justify-center px-3 py-2 border border-gray-300 text-gray-700 text-sm font-medium rounded-md bg-transparent hover:bg-gray-200 hover:text-gray-900 transition-colors focus:outline-none focus:ring-2 focus:ring-gray-200">
+              ✏️
+            </a>
+
+            <a href="{% url 'main:delete_product' product.id %}"
+               class="block w-full sm:w-auto flex-1 sm:flex-none text-center inline-flex items-center justify-center px-3 py-2 border border-red-600 text-red-600 text-sm font-medium rounded-md bg-transparent hover:bg-red-600 hover:text-white transition-colors focus:outline-none focus:ring-2 focus:ring-red-200">
+              🗑️
+            </a>
+          </div>
         </div>
       </div>
     {% else %}
       <div class="pt-4 border-t border-gray-100">
-        <a href="{% url 'main:show_product' product.id %}" class="text-green-600 hover:text-gray-700 font-medium text-sm transition-colors">
-          Product details →
+        <a href="{% url 'main:show_product' product.id %}"
+           class="block w-full text-center inline-flex items-center justify-center px-4 py-2 border border-green-600 text-green-600 text-sm font-medium rounded-md bg-transparent hover:bg-green-600 hover:text-white transition-colors focus:outline-none focus:ring-2 focus:ring-green-200">
+          Details
         </a>
       </div>
     {% endif %}
