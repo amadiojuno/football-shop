@@ -1,59 +1,112 @@
 {% extends 'base.html' %}
+{% load static %}
+
+{% block meta %}
+<title>BeliBola</title>
+{% endblock meta %}
+
 {% block content %}
-<h1>BeliBola</h1>
+{% include 'navbar.html' %}
 
-<h5>NPM: </h5>
-<p>{{ npm }}<p>
+<div class="bg-gray-25 w-full pt-16 min-h-screen">  
 
-<h5>Name:</h5>
-<p>{{ name }}</p>
+  <!-- Large Header Image Section -->
+  <div class="w-full relative">
+    <div class="w-full h-64 sm:h-80 md:h-96 relative overflow-hidden">
+      <img 
+        src="{% static 'image/belibola-header.jpeg' %}" 
+        alt="Football Shop Banner" 
+        class="w-full h-full object-cover">
 
-<a href="{% url 'main:add_product' %}">
-    <button>+ Add Product</button>
-</a>
+      <!-- Overlay -->
+      <div class="absolute inset-0 bg-black bg-opacity-55 flex items-center justify-center">
+        <div class="text-center text-white p-4">
+          <h1 class="text-xl md:text-7xl font-bold mb-2 drop-shadow-lg">BeliBola</h1>
+          <p class="text-xl md:text-xl drop-shadow-md">All Your Football Needs and Desires</p>
+        </div>
+      </div>
+    </div>
+  </div>
 
-<a href="{% url 'main:logout' %}">
-    <button>Logout</button>
-</a>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
 
-<h5>Sesi terakhir login: {{ last_login }}</h5>
+    <!-- Filter Section -->
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-8 bg-white rounded-lg border border-gray-200 p-4">
+      <div class="mb-4 sm:mb-0">
+        <div class="relative">
+          <div class="flex items-center space-x-3">
+            <select
+              class="block w-full px-4 py-2 pr-8 rounded-md font-medium bg-white text-gray-700 border border-gray-300 transition-colors focus:outline-none focus:ring-2 focus:ring-gray-600 focus:border-gray-600 hover:border-gray-600 hover:shadow-md"
+              onchange="window.location.href=this.value"
+            >
+              <option value="?owner=&category={{ request.GET.category|default:'' }}" {% if not request.GET.owner %}selected{% endif %}>
+              All Products
+              </option>
+              <option value="?owner=my&category={{ request.GET.category|default:'' }}" {% if request.GET.owner == 'my' %}selected{% endif %}>
+              My Products
+              </option>
+            </select>
+            <select
+              class="block w-full px-4 py-2 pr-8 rounded-md font-medium bg-white text-gray-700 border border-gray-300 transition-colors focus:outline-none focus:ring-2 focus:ring-gray-600 focus:border-gray-600 hover:border-gray-600 hover:shadow-md"
+              onchange="window.location.href=this.value"
+            >
+              <option value="?owner={{ request.GET.owner|default:'' }}&category=" {% if not request.GET.category %}selected{% endif %}>
+              All Categories
+              </option>
+              <option value="?owner={{ request.GET.owner|default:'' }}&category=featured" {% if request.GET.category == 'featured' %}selected{% endif %}>
+              Featured
+              </option>
+              <option value="?owner={{ request.GET.owner|default:'' }}&category=hot" {% if request.GET.category == 'hot' %}selected{% endif %}>
+              Hot
+              </option>
+              <option value="?owner={{ request.GET.owner|default:'' }}&category=shoes" {% if request.GET.category == 'shoes' %}selected{% endif %}>
+              Shoes
+              </option>
+              <option value="?owner={{ request.GET.owner|default:'' }}&category=clothes" {% if request.GET.category == 'clothes' %}selected{% endif %}>
+              Clothes
+              </option>
+              <option value="?owner={{ request.GET.owner|default:'' }}&category=equipment" {% if request.GET.category == 'equipment' %}selected{% endif %}>
+              Equipment
+              </option>
+              <option value="?owner={{ request.GET.owner|default:'' }}&category=accessories" {% if request.GET.category == 'accessories' %}selected{% endif %}>
+              Accessories
+              </option>
+              <option value="?owner={{ request.GET.owner|default:'' }}&category=misc" {% if request.GET.category == 'misc' %}selected{% endif %}>
+              Miscellaneous
+              </option>
+            </select>
+            <a href="{% url 'main:add_product' %}" class="block w-full py-2 bg-gray-600 text-white rounded-md text-center hover:bg-gray-700 transition-colors">
+              Add Product
+            </a>
+          </div>
+        </div>
+      </div>
+      {% if user.is_authenticated %}
+        <div class="text-sm text-gray-500">
+          Last login: {{ last_login }}
+        </div>
+      {% endif %}
+    </div>
 
-<a href="?filter=all">
-    <button type="button">All Products</button>
-</a>
-<a href="?filter=my">
-    <button type="button">My Products</button>
-</a>
-
-<hr>
-
-{% if not product_list %}
-<p>Belum ada data produk pada football shop.</p>
-{% else %}
-
-{% for product in product_list %}
-<div>
-    <h2><a href="{% url 'main:show_product' product.id %}">{{ product.name }}</a></h2>
-
-    <p><b>{{ product.get_category_display }}</b>{% if product.is_featured %} |
-        <b>Brand:</b> {{ product.brand }} |
-        <b>Featured</b>{% endif %}{% if product.is_hot %} | 
-        <b>Hot</b>{% endif %} | <i>{{ product.created_at|date:"d M Y H:i" }}</i> 
-        | Views: {{ product.views }}</p>
-
-    {% if product.thumbnail %}
-    <img src="{{ product.thumbnail }}" alt="thumbnail" width="150" height="100">
-    <br />
+    <!-- Products Grid -->
+    {% if not product_list %}
+      <div class="bg-white rounded-lg border border-gray-200 p-12 text-center">
+        <div class="w-32 h-32 mx-auto mb-4">
+          <img src="{% static 'image/no-products.png' %}" alt="No products available" class="w-full h-full object-contain">
+        </div>
+        <h3 class="text-lg font-medium text-gray-900 mb-2">No products yet :(</h3>
+        <p class="text-gray-500 mb-6">Add your products now by clicking the button below</p>
+        <a href="{% url 'main:add_product' %}" class="inline-flex items-center px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 transition-colors">
+          + Add New Product
+        </a>
+      </div>
+    {% else %}
+      <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        {% for product in product_list %}
+          {% include 'card_product.html' with product=product %}
+        {% endfor %}
+      </div>
     {% endif %}
-
-    <p>{{ product.description|truncatewords:25 }}...</p>
-
-    <p><a href="{% url 'main:show_product' product.id %}"><button>Read More</button></a></p>
+  </div>
 </div>
-
-<hr>
-{% endfor %}
-
-{% endif %}
-
 {% endblock content %}

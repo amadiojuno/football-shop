@@ -14,18 +14,29 @@ from django.urls import reverse
 
 @login_required(login_url='/login')
 def show_main(request):
-    filter_type = request.GET.get("filter", "all")  # default 'all'
+    owner_filter = request.GET.get('owner')
+    category_filter = request.GET.get('category')
+    product_list = Product.objects.all()
 
-    if filter_type == "all":
-        product_list = Product.objects.all()
-    else:
-        product_list = Product.objects.filter(user=request.user)
+    if owner_filter == 'my' and request.user.is_authenticated:
+        product_list = product_list.filter(user=request.user)
+
+    if category_filter:
+        match category_filter:
+            case "all":
+                pass 
+            case "featured":
+                product_list = product_list.filter(is_featured=True)
+            case "hot":
+                product_list = product_list.filter(views__gt=20)
+            case "shoes" | "clothes" | "equipment" | "accessories" | "misc":
+                product_list = product_list.filter(category=category_filter)
 
     context = {
         'npm': '2406496416',
         'name': request.user.username,
         'class': 'PBP E',
-        'product_list': product_list,
+        'product_list': product_list.order_by('-id'),
         'last_login': request.COOKIES.get('last_login', 'Never')
     }
     return render(request, "main.html",context)
@@ -112,3 +123,21 @@ def logout_user(request):
     response = HttpResponseRedirect(reverse('main:login'))
     response.delete_cookie('last_login')
     return response
+
+def edit_product(request, id):
+    product = get_object_or_404(Product, pk=id)
+    form = ProductForm(request.POST or None, instance=product)
+    if form.is_valid() and request.method == 'POST':
+        form.save()
+        return redirect('main:show_main')
+
+    context = {
+        'form': form
+    }
+
+    return render(request, "edit_product.html", context)
+
+def delete_product(request, id):
+    product = get_object_or_404(Product, pk=id)
+    product.delete()
+    return HttpResponseRedirect(reverse('main:show_main'))
