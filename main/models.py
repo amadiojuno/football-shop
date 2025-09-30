@@ -19,6 +19,7 @@ class Product(models.Model):
     rating = models.FloatField(default=0.0, validators=[MaxValueValidator(5.0), MinValueValidator(0.0)])
     views = models.IntegerField(default=0) 
     thumbnail = models.URLField()
+    thumbnail_alt = models.URLField(blank=True, null=True)
     category = models.CharField(max_length=20, choices=CATEGORY_CHOICES, default='shoes')
     is_featured = models.BooleanField(default=False)
     

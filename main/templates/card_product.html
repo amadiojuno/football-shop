@@ -4,9 +4,13 @@
 <article class="bg-white rounded-lg hover:shadow-lg transition-all duration-100 overflow-hidden ease-in-out hover:scale-105">
   <!-- Thumbnail -->
   <div class="aspect-[16/9] relative overflow-hidden">
-    <a href="{% url 'main:show_product' product.id %}">
+    <a href="{% url 'main:show_product' product.id %}" class="block w-full h-full">
       {% if product.thumbnail %}
+        <!-- main image -->
         <img src="{{ product.thumbnail }}" alt="{{ product.name }}" class="w-full h-full object-cover">
+        {% if product.thumbnail_alt %}
+          <img src="{{ product.thumbnail_alt }}" alt="{{ product.name }} - alternatif" class="absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity hover:opacity-100">
+        {% endif %}
       {% else %}
         <div class="w-full h-full bg-gray-200"></div>
       {% endif %}
