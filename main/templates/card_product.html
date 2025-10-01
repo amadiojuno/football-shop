@@ -1,7 +1,7 @@
 {% load static %}
 {% load humanize %}
 
-<article class="bg-white rounded-lg hover:shadow-lg transition-all duration-100 overflow-hidden ease-in-out hover:scale-105">
+<article class="rounded-lg hover:shadow-xl hover:shadow-[#545454] transition-all duration-100 overflow-hidden ease-in-out hover:scale-105">
   <!-- Thumbnail -->
   <div class="aspect-[16/9] relative overflow-hidden">
     <a href="{% url 'main:show_product' product.id %}" class="block w-full h-full">
@@ -52,12 +52,12 @@
       <span>{{ product.views }} views</span>
     </div> -->
 
-    <h5 class="text-sm text-gray-500 mb-1">
+    <h5 class="text-sm text-white mb-1">
       {{ product.brand }}
     </h5>
 
-    <h3 class="text-lg font-semibold text-gray-900 mb-3 line-clamp-2 leading-tight">
-      <a href="{% url 'main:show_product' product.id %}" class="hover:text-gray-600 transition-colors">
+    <h3 class="text-lg font-semibold text-white mb-3 line-clamp-2 leading-tight">
+      <a href="{% url 'main:show_product' product.id %}" class="hover:text-gray-400 transition-colors">
         {{ product.brand }} {{ product.name }}
       </a>
     </h3>
@@ -73,7 +73,7 @@
           {% endif %}
         {% endfor %}
       </div>
-      <span class="text-sm text-gray-600">({{ product.rating }} / 5.0)</span>
+      <span class="text-sm text-white">({{ product.rating }} / 5.0)</span>
     </div>
 
     <h4 class="text-l font-bold text-green-600 mb-3">
@@ -86,7 +86,7 @@
 
     <!-- Action Buttons (outline, fill on hover, responsive full-width) -->
     {% if user.is_authenticated and product.user == user %}
-      <div class="pt-4 border-t border-gray-100">
+      <div class="pt-4">
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
           <!-- Primary: fills available space on desktop, full width on mobile -->
           <a href="{% url 'main:show_product' product.id %}"
@@ -109,7 +109,7 @@
         </div>
       </div>
     {% else %}
-      <div class="pt-4 border-t border-gray-100">
+      <div class="pt-4">
         <a href="{% url 'main:show_product' product.id %}"
            class="block w-full text-center inline-flex items-center justify-center px-4 py-2 border border-green-600 text-green-600 text-sm font-medium rounded-md bg-transparent hover:bg-green-600 hover:text-white transition-colors focus:outline-none focus:ring-2 focus:ring-green-200">
           Details

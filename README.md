@@ -123,3 +123,55 @@ Tugas Individu 4
             - Menampilkan username dan last_login di halaman utama
             - Menyimpan cookie saat login dan menghapusnya saat logout
             - Menambahkan informasi author pada halaman detail produk
+
+Tugas Individu 5
+    1. Jika terdapat beberapa CSS selector untuk suatu elemen HTML, jelaskan urutan prioritas pengambilan CSS selector tersebut!
+        - !important (mengalahkan semua, jika sama -> spesifisitas + urutan sumber)
+        - Inline style (style="...")
+        - Selector berdasarkan spesifisitas: ID (#id) > class/attribute/pseudo-class (.class, [attr], :hover) > elemen/pseudo-element (div, ::after)
+        - Jika spesifisitas sama -> aturan yang ditulis terakhir (source order) menang.
+    2. Mengapa responsive design menjadi konsep yang penting dalam pengembangan aplikasi web? Berikan contoh aplikasi yang sudah dan belum menerapkan responsive design, serta jelaskan mengapa!
+        - Penting karena perangkat berlainan ukuran, meningkatkan UX, aksesibilitas, SEO, dan maintainability.
+        - Contoh sudah responsive: Wikipedia, Twitter, tampil konsisten di mobile & desktop.
+        - Contoh belum responsive: situs web lama/legacy (beberapa situs pemerintahan/korporat tua), biasanya tampilan rusak di layar kecil karena layout tetap (fixed width). Contoh: SIAKNG
+    3. Jelaskan perbedaan antara margin, border, dan padding, serta cara untuk mengimplementasikan ketiga hal tersebut!
+        - Margin: ruang luar elemen (memisahkan elemen lain). CSS: margin: 10px,
+        - Border: garis di tepi elemen, di antara padding dan margin. CSS: border: 1px solid #000,
+        - Padding: ruang dalam elemen antara konten dan border. CSS: padding: 8px,
+    4. Jelaskan konsep flex box dan grid layout beserta kegunaannya!
+        - Flexbox: layout satu dimensi (baris/kolom) untuk alignment dan distribusi ruang pada item, bagus untuk navbar, card row, centering. Properti utama: display: flex, justify-content, align-items.
+        - Grid: layout dua dimensi (baris + kolom) untuk tata letak kompleks halaman, bagus untuk desain grid halaman, dashboard. Properti utama: display: grid, grid-template-columns/rows, gap.
+        - Flex untuk item linear, grid untuk susunan kompleks dua arah.
+    5. Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial)!
+        -  Implementasikan fungsi untuk menghapus dan mengedit product.
+            1. Membuat fungsi edit_product yang menggunakan ProductForm dengan instance product yang sudah ada
+            2. Membuat fungsi delete_product untuk menghapus produk berdasarkan ID
+            3. Mendefinisikan URL patterns di urls.py:
+            4. Menambahkan path edit_product/<str:id>/str:id/ dan delete_product/<str:id>/str:id/
+            5. Membuat template edit_product.html dengan form untuk mengedit produk
+        - Kustomisasi desain pada template HTML yang telah dibuat pada tugas-tugas sebelumnya menggunakan CSS atau CSS framework (seperti Bootstrap, Tailwind, Bulma) dengan ketentuan sebagai berikut:
+            - Kustomisasi halaman login, register, tambah product, edit product, dan detail product semenarik mungkin.
+            - Kustomisasi halaman daftar product menjadi lebih menarik dan responsive. Kemudian, perhatikan kondisi berikut:
+                - Jika pada aplikasi belum ada product yang tersimpan, halaman daftar product akan menampilkan gambar dan pesan bahwa belum ada product yang terdaftar.
+                - Jika sudah ada product yang tersimpan, halaman daftar product akan menampilkan detail setiap product dengan menggunakan card
+            1. Mengimplementasikan Tailwind CSS via CDN di base.html
+            2. Mendesain form dengan background image dan efek overlay
+            3. Menggunakan card style dengan warna gelap dan box-shadow
+            4. Menerapkan desain clean dengan spacing yang konsisten
+            5. Menambahkan validasi form dan handling error
+            6. Menampilkan informasi lengkap dengan layout yang menarik
+            7. Menambahkan rating stars dan formating harga
+            8. Menampilkan gambar no-products.png dan pesan informatif
+            9. Menambahkan tombol "Add New Product" untuk UX yang lebih baik
+        - Untuk setiap card product, buatlah dua buah
+         button untuk mengedit dan menghapus product pada card tersebut!
+            1. Membuat template card_product.html yang dapat digunakan kembali
+            2. Menerapkan grid layout responsif (1 kolom mobile, 3 kolom desktop)
+            3. Menambahkan hover effect dan transisi pada card
+        - Buatlah navigation bar (navbar) untuk fitur-fitur pada aplikasi yang responsive terhadap perbedaan ukuran device, khususnya mobile dan desktop.
+            1. Mendesain navbar yang fixed di bagian atas
+            2. Mengimplementasikan menu mobile yang disembunyikan dan dapat ditoggle
+            3. Menggunakan flexbox dan media queries dengan Tailwind
+            4. Menu desktop: menampilkan semua item secara horizontal
+            5. Menu mobile: menggunakan hamburger button dan panel dropdown
+            6. Menambahkan fitur highlight menu aktif berdasarkan kategori yang dipilih
