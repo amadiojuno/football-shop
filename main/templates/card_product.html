@@ -3,7 +3,7 @@
 
 <article class="rounded-lg hover:shadow-xl hover:shadow-[#545454] transition-all duration-100 overflow-hidden ease-in-out hover:scale-105">
   <!-- Thumbnail -->
-  <div class="aspect-[16/9] relative overflow-hidden">
+  <div class="aspect-[1/1] relative overflow-hidden">
     <a href="{% url 'main:show_product' product.id %}" class="block w-full h-full">
       {% if product.thumbnail %}
         <!-- main image -->
@@ -41,11 +41,11 @@
   <!-- Content -->
   <div class="p-5">
 
-    <h5 class="text-sm text-white mb-1 uppercase text-center w-full">
+    <h5 class="text-xs text-white mb-1 uppercase text-center w-full">
       {{ product.brand|upper }}
     </h5>
 
-    <h3 class="text-xl font-semibold text-white mb-3 line-clamp-2 leading-tight justify text-center w-full">
+    <h3 class="text-lg font-semibold text-white mb-3 line-clamp-2 leading-tight justify text-center w-full">
       <a href="{% url 'main:show_product' product.id %}" class="hover:text-gray-400 transition-colors">
         {{ product.brand }} {{ product.name }}
       </a>
@@ -65,7 +65,7 @@
       <!-- <span class="text-sm text-white">({{ product.rating }} / 5.0)</span> -->
     </div>
 
-    <h4 class="text-l font-bold text-green-600 mb-3 text-center w-full">
+    <h4 class="text-md font-bold text-green-600 mb-3 text-center w-full">
       Rp. {{ product.price|intcomma }}
     </h4>
 
