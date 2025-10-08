@@ -2,13 +2,16 @@ import datetime
 from django.shortcuts import render, redirect, get_object_or_404
 from main.forms import ProductForm
 from main.models import Product
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect,  JsonResponse
 from django.core import serializers
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib import messages
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_POST
+from django.utils.html import strip_tags
 
 # Create your views here.
 
@@ -70,9 +73,26 @@ def show_xml(request):
     return HttpResponse(xml_data, content_type="application/xml")
 
 def show_json(request):
-    product_list = Product.objects.all()
-    json_data = serializers.serialize("json", product_list)
-    return HttpResponse(json_data, content_type="application/json")
+    product_list = Product.objects.all().order_by('-id')
+    data = [
+        {
+            'id': str(product.id),
+            'name': product.name,
+            'brand': product.brand,
+            'price': product.price,
+            'description': product.description,
+            'rating': float(product.rating),
+            'views': product.views,
+            'thumbnail': product.thumbnail,
+            'thumbnail_alt': product.thumbnail_alt,
+            'category': product.category,
+            'is_featured': product.is_featured,
+            'user_id': product.user.id if product.user else None,
+        }
+        for product in product_list
+    ]
+
+    return JsonResponse(data, safe=False)
 
 def show_xml_by_id(request, product_id):
     try:
@@ -84,11 +104,25 @@ def show_xml_by_id(request, product_id):
 
 def show_json_by_id(request, product_id):
     try:
-        product_item = Product.objects.get(pk=product_id)
-        json_data = serializers.serialize("json", [product_item])
-        return HttpResponse(json_data, content_type="application/json")
+        product = Product.objects.select_related('user').get(pk=product_id)
+        data = {
+            'id': str(product.id),
+            'name': product.name,
+            'brand': product.brand,
+            'price': product.price,
+            'description': product.description,
+            'rating': float(product.rating),
+            'views': product.views,
+            'thumbnail': product.thumbnail,
+            'thumbnail_alt': product.thumbnail_alt,
+            'category': product.category,
+            'is_featured': product.is_featured,
+            'user_id': product.user_id,
+            'user_username': product.user.username if product.user_id else None,
+        }
+        return JsonResponse(data)
     except Product.DoesNotExist:
-        return HttpResponse(status=404)
+        return JsonResponse({'detail': 'Not found'}, status=404)
     
 def register(request):
     form = UserCreationForm()
@@ -141,3 +175,33 @@ def delete_product(request, id):
     product = get_object_or_404(Product, pk=id)
     product.delete()
     return HttpResponseRedirect(reverse('main:show_main'))
+
+@csrf_exempt
+@require_POST
+def add_product_entry_ajax(request):
+    name = strip_tags(request.POST.get("name"))
+    brand = strip_tags(request.POST.get("brand"))
+    price = strip_tags(request.POST.get("price"))
+    description = strip_tags(request.POST.get("description"))
+    category = request.POST.get("category")
+    rating = strip_tags(request.POST.get("rating"))
+    thumbnail = strip_tags(request.POST.get("thumbnail"))
+    thumbnail_alt = strip_tags(request.POST.get("thumbnail_alt"))
+    is_featured = request.POST.get("is_featured") == 'on'
+    user = request.user
+
+    new_product = Product(
+        name=name,
+        brand=brand,
+        price=price,
+        description=description,
+        category=category,
+        rating=rating,
+        thumbnail=thumbnail,
+        thumbnail_alt=thumbnail_alt if thumbnail_alt else None,
+        is_featured=is_featured,
+        user=user
+    )
+    new_product.save()
+
+    return HttpResponse(b"CREATED", status=201)

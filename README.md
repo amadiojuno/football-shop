@@ -175,3 +175,16 @@ Tugas Individu 5
             4. Menu desktop: menampilkan semua item secara horizontal
             5. Menu mobile: menggunakan hamburger button dan panel dropdown
             6. Menambahkan fitur highlight menu aktif berdasarkan kategori yang dipilih
+
+Tugas Individu 6
+    1. Apa perbedaan antara synchronous request dan asynchronous request?
+        - Synchronous memblokir halaman dan memaksa pengguna menunggu hingga seluruh halaman di-reload
+        - Asynchronous/AJAX bekerja di background tanpa memblokir dan hanya memperbarui sebagian kecil halaman
+    2. Bagaimana AJAX bekerja di Django (alur request–response)?
+        - JavaScript mengirim request ke URL Django, Django view memprosesnya dan mengembalikan data (biasanya JSON), lalu JavaScript menggunakan data itu untuk memperbarui halaman tanpa reload.
+    3. Apa keuntungan menggunakan AJAX dibandingkan render biasa di Django?
+        - Lebih cepat, lebih ringan untuk server, dan memberikan UX yang jauh lebih baik karena interaksi terasa instan dan mulus
+    4. Bagaimana cara memastikan keamanan saat menggunakan AJAX untuk fitur Login dan Register di Django?
+        - Wajibkan penggunaan CSRF Token, koneksi HTTPS, dan lakukan semua validasi data di sisi server (Django), bukan hanya di browser
+    5. Bagaimana AJAX mempengaruhi pengalaman pengguna (User Experience) pada website?
+        - Membuat website terasa seperti aplikasi modern yang responsif dan interaktif karena menghilangkan jeda loading halaman dan memberikan umpan balik instan

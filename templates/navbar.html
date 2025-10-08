@@ -5,7 +5,7 @@
     <div class="flex items-center justify-between h-16">
       <div class="flex items-center">
         <h1 class="text-xl font-semibold text-gray-400">
-          <a href="{% url 'main:show_main' %}">
+          <a href="#" class="nav-link" data-category="" data-type="brand">
             <img src="{% static 'image/belibola.png' %}" alt="Logo" class="inline h-8 w-8 mr-1 mb-1">
             <span class="text-white">Beli</span>Bola
           </a>
@@ -14,19 +14,16 @@
       
       <!-- Desktop Navigation -->
       <div class="hidden md:flex items-center space-x-8">
-        <a href="/" class="text-gray-100 hover:text-gray-400 font-medium hover:scale-105 transition-all duration-100">
+        <a href="#" class="nav-link text-gray-100 hover:text-gray-400 font-medium hover:scale-105 transition-all duration-100" data-category="" data-type="home">
           Home
         </a>
-        <a href="/?owner=&category=" 
-          class="text-gray-100 hover:text-gray-400 font-medium hover:scale-105 transition-all duration-100 {% if not request.GET.category %}font-semibold text-green-600{% endif %}">
+        <a href="#" class="nav-link text-gray-100 hover:text-gray-400 font-medium hover:scale-105 transition-all duration-100 {% if not request.GET.category %}font-semibold text-green-600{% endif %}" data-category="" data-type="all">
           All Products
         </a>
-        <a href="/?owner=&category=featured" 
-          class="text-gray-100 hover:text-gray-400 font-medium hover:scale-105 transition-all duration-100 {% if request.GET.category == 'featured' %}font-semibold text-green-600{% endif %}">
+        <a href="#" class="nav-link text-gray-100 hover:text-gray-400 font-medium hover:scale-105 transition-all duration-100 {% if request.GET.category == 'featured' %}font-semibold text-green-600{% endif %}" data-category="featured">
           Featured
         </a>
-        <a href="/?owner=&category=hot" 
-          class="text-gray-100 hover:text-gray-400 font-medium hover:scale-105 transition-all duration-100 {% if request.GET.category == 'hot' %}font-semibold text-green-600{% endif %}">
+        <a href="#" class="nav-link text-gray-100 hover:text-gray-400 font-medium hover:scale-105 transition-all duration-100 {% if request.GET.category == 'hot' %}font-semibold text-green-600{% endif %}" data-category="hot">
           Hot
         </a>
       </div>
@@ -69,16 +66,16 @@
     <div class="px-6 py-4 space-y-4">
       <!-- Mobile Navigation Links -->
       <div class="space-y-1">
-        <a href="/" class="block text-gray-100 hover:text-gray-400 font-medium py-3 transition-colors">
+        <a href="#" class="nav-link block text-gray-100 hover:text-gray-400 font-medium py-3 transition-colors" data-category="">
           Home
         </a>
-        <a href="/?owner=&category=" class="block text-gray-100 hover:text-gray-400 font-medium py-3 transition-colors">
+        <a href="#" class="nav-link block text-gray-100 hover:text-gray-400 font-medium py-3 transition-colors" data-category="">
           All Products
         </a>
-        <a href="/?owner=&category=featured" class="block text-gray-100 hover:text-gray-400 font-medium py-3 transition-colors">
+        <a href="#" class="nav-link block text-gray-100 hover:text-gray-400 font-medium py-3 transition-colors" data-category="featured">
           Featured
         </a>
-        <a href="/?owner=&category=hot" class="block text-gray-100 hover:text-gray-400 font-medium py-3 transition-colors">
+        <a href="#" class="nav-link block text-gray-100 hover:text-gray-400 font-medium py-3 transition-colors" data-category="hot">
           Hot
         </a>
       </div>
@@ -107,11 +104,68 @@
     </div>
   </div>
   <script>
-    const btn = document.querySelector("button.mobile-menu-button");
-    const menu = document.querySelector(".mobile-menu");
-  
-    btn.addEventListener("click", () => {
-      menu.classList.toggle("hidden");
+    document.addEventListener('DOMContentLoaded', function() {
+      // Mobile menu toggle
+      const btn = document.querySelector("button.mobile-menu-button");
+      const menu = document.querySelector(".mobile-menu");
+    
+      btn.addEventListener("click", () => {
+        menu.classList.toggle("hidden");
+      });
+
+      // AJAX navigation for navbar links
+      const navLinks = document.querySelectorAll('a.nav-link');
+      
+      navLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+          e.preventDefault();
+          
+          // Get the category from data attribute
+          const category = this.getAttribute('data-category');
+          
+          // Update the category filter in main.html
+          if (typeof activeCategoryFilter !== 'undefined') {
+            // We're on the main page, use the existing filter mechanism
+            activeCategoryFilter = category;
+            
+            // Update the select dropdown to match
+            if (filterCategorySelect) {
+              if (category === '') {
+                filterCategorySelect.value = 'all';
+              } else {
+                filterCategorySelect.value = category;
+              }
+            }
+            
+            // Apply the filter
+            filterAndDisplayProducts();
+            
+            // Update active state of navbar links
+            updateNavLinkActiveStates(category);
+          } else {
+            // We're not on the main page, navigate to the main page with filter
+            window.location.href = `/?owner=&category=${category}`;
+          }
+        });
+      });
+      
+      // Function to update active states of navbar links
+      function updateNavLinkActiveStates(activeCategory) {
+        // clear all
+        navLinks.forEach(link => {
+          link.classList.remove('font-semibold', 'text-green-600');
+        });
+
+        if (activeCategory === '') {
+          // when selecting "all products" only highlight the All Products link
+          const allLink = document.querySelector('a.nav-link[data-type="all"]');
+          if (allLink) allLink.classList.add('font-semibold', 'text-green-600');
+        } else {
+          // highlight link whose data-category matches (featured/hot/...)
+          const match = document.querySelector(`a.nav-link[data-category="${activeCategory}"]`);
+          if (match) match.classList.add('font-semibold', 'text-green-600');
+        }
+      }
     });
   </script>
 </nav>
